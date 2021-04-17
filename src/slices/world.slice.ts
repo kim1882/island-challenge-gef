@@ -6,12 +6,12 @@ export enum CellType {
   GREEN_LAND = 'greenLand',
   BROWN_LAND = 'brownLand',
 }
-export interface ICellType {
+export interface ICellProperties {
   type: CellType
 }
 
-interface ICell {
-  [id: string]: ICellType
+export interface ICell {
+  [id: string]: ICellProperties
 }
 
 interface IWorldSlice {
@@ -36,7 +36,7 @@ const worldSlice = createSlice({
     setHeight: (state, action: PayloadAction<number>) => {
       state.height = action.payload
     },
-    updateCellType: (state, action: PayloadAction<{ id: string; value: ICellType }>) => {
+    updateCellType: (state, action: PayloadAction<{ id: string; value: ICellProperties }>) => {
       const {
         payload: { id, value },
       } = action
@@ -48,7 +48,9 @@ const worldSlice = createSlice({
       } else {
         // The first time the cell is modified, ignore sea types, unless it was previously modified (above)
         const { type } = value
-        if (type !== CellType.SEA) state.modifiedCells = { ...modifiedCellsCopy, [id]: value }
+        if (type !== CellType.SEA) {
+          state.modifiedCells = { ...modifiedCellsCopy, [id]: value }
+        }
       }
     },
   },

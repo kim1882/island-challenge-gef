@@ -8,6 +8,7 @@ interface IContainerProps {
 }
 
 export const Container = styled.section<IContainerProps>`
+  cursor: pointer;
   box-sizing: border-box;
   background-color: ${(props) =>
     props.type === CellType.SEA

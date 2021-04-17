@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useDispatch } from 'react-redux'
 import { Container } from './Cell.styled'
-import { CellType, ICellType, updateCellType } from '../../slices/world.slice'
+import { CellType, ICellProperties, updateCellType } from '../../slices/world.slice'
 
 interface ICellProps {
   id: string
@@ -27,7 +27,7 @@ const Cell = ({ id, totalWidth, totalHeight }: ICellProps) => {
   }
 
   React.useEffect(() => {
-    const value: ICellType = { type }
+    const value: ICellProperties = { type }
     if (id) dispatch(updateCellType({ id, value }))
   }, [id, dispatch, type])
 
