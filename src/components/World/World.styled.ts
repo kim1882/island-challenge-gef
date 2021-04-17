@@ -5,7 +5,7 @@ const shadow = css`
 `
 
 export const Container = styled.section`
-  background-color: white;
+  background-color: #186a3b;
   margin: 20px 5px 20px 10px;
   border-radius: 8px;
 
@@ -16,8 +16,8 @@ export const Grid = styled.section`
   margin: 20px;
   overflow: hidden;
   border-radius: 8px;
-  max-width: calc(100vw - 455px);
-  max-height: calc(100vh - 80px);
+  width: calc(100vw - 455px);
+  height: calc(100vh - 80px);
 `
 
 export const Row = styled.section`

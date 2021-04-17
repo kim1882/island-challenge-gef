@@ -14,7 +14,7 @@ const World = ({ width = 1, height = 1 }: IWorldProps) => {
         {[...Array(height)].map((e, i) => (
           <Row key={`row-${i}`}>
             {[...Array(width)].map((f, j) => (
-              <Cell key={`${i}-${j}`} totalWidth={width} totalHeight={height} />
+              <Cell id={`${i}-${j}`} key={`${i}-${j}`} totalWidth={width} totalHeight={height} />
             ))}
           </Row>
         ))}

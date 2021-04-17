@@ -1,16 +1,18 @@
 import * as React from 'react'
+import { useSelector } from 'react-redux'
 import { Container } from './IslandBuilder.styled'
 import World from '../../components/World'
-import Settings from '../../components/Settings'
+import Sidebar from '../../components/Sidebar'
+import { selectWidth, selectHeight } from '../../slices/world.slice'
 
 const IslandBuilder = () => {
-  const width = 5
-  const height = 5
+  const width = useSelector(selectWidth)
+  const height = useSelector(selectHeight)
 
   return (
     <Container>
       <World width={width} height={height} />
-      <Settings />
+      <Sidebar />
     </Container>
   )
 }
