@@ -31,7 +31,9 @@ const Cell = ({ id, totalWidth, totalHeight }: ICellProps) => {
     if (id) dispatch(updateCellType({ id, value }))
   }, [id, dispatch, type])
 
-  return <Container type={type} onClick={toggleState} totalWidth={totalWidth} totalHeight={totalHeight} />
+  return (
+    <Container aria-label="cell" type={type} onClick={toggleState} totalWidth={totalWidth} totalHeight={totalHeight} />
+  )
 }
 
 export default Cell

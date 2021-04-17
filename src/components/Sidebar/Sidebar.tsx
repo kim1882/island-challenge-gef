@@ -101,13 +101,16 @@ const Sidebar = () => {
   ]
 
   return (
-    <Container>
+    <Container aria-label="sidebar">
       <Header>Island Builder</Header>
       <Settings>
         <div className="instructions">Define the number of rows and columns</div>
         <Property>
-          <span className="title">Width:</span>
+          <label htmlFor={'widthInput'} className="title">
+            Width:
+          </label>
           <input
+            id="widthInput"
             name="widthInput"
             className="numberInput"
             type="number"
@@ -119,8 +122,11 @@ const Sidebar = () => {
           columns
         </Property>
         <Property>
-          <span className="title">Height:</span>
+          <label htmlFor={'heightInput'} className="title">
+            Height:
+          </label>
           <input
+            id="heightInput"
             name="heightInput"
             className="numberInput"
             type="number"
@@ -142,7 +148,10 @@ const Sidebar = () => {
             <br />
             <span className="islandCountMsg">
               You've built
-              <br /> <span className="islandCount">{totalIslands}</span>
+              <br />{' '}
+              <span aria-label={'totalIslands'} className="islandCount">
+                {totalIslands}
+              </span>
               <br /> islands
             </span>
           </div>

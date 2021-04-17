@@ -10,7 +10,7 @@ const IslandBuilder = () => {
   const height = useSelector(selectHeight)
 
   return (
-    <Container>
+    <Container aria-label="islandBuilder">
       <World width={width} height={height} />
       <Sidebar />
     </Container>

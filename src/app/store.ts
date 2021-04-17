@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import worldReducer from '../slices/world.slice'
 
-export const store = configureStore({
+export const configStore = {
   reducer: {
     world: worldReducer,
   },
-})
+}
+
+export const store = configureStore(configStore)
 
 export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>
