@@ -11,7 +11,12 @@ import {
 const DEFAULT_VALUE = 3
 const MIN_VALUE = 1
 const MAX_VALUE = 100
-
+const nearPositions = [
+  { x: 0, y: -1 },
+  { x: 0, y: 1 },
+  { x: -1, y: 0 },
+  { x: 1, y: 0 },
+]
 interface IPosition {
   x: number
   y: number
@@ -45,35 +50,34 @@ const Sidebar = () => {
 
   const visitedKeys: string[] = []
 
+  const getXY = (key: string) => {
+    const index = key.split('-')
+    const x = parseInt(index[0], 10)
+    const y = parseInt(index[1], 10)
+    return { x, y }
+  }
+  const cellExists = (key: string) => {
+    const { x, y } = getXY(key)
+    return x >= 0 && x < height && y >= 0 && y < width
+  }
+
   const visitCell = React.useCallback(
     (key: string, cellType: string) => {
-      if (!visitedKeys.includes(key)) {
+      if (!visitedKeys.includes(key) && cellExists(key)) {
         const value = modifiedCells[key]
         if (value) {
           const { type } = value
           if (type && type !== CellType.SEA) {
-            const nearPositions = [
-              { x: 0, y: -1 },
-              { x: 0, y: 1 },
-              { x: -1, y: 0 },
-              { x: 1, y: 0 },
-            ]
             if (cellType === 'start') {
               setTotalIslands((t) => t + 1)
             }
             visitedKeys.push(key)
             // Get key x, y
-            const index = key.split('-')
-            const x = parseInt(index[0], 10)
-            const y = parseInt(index[1], 10)
+            const { x, y } = getXY(key)
             // Visit near cells
             nearPositions.forEach((position: IPosition) => {
-              const newX = x + position.x
-              const newY = y + position.y
-              if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
-                const newKey = `${newX}-${newY}`
-                visitCell(newKey, 'near')
-              }
+              const newKey = `${x + position.x}-${y + position.y}`
+              visitCell(newKey, 'near')
             })
           }
         }
@@ -87,7 +91,7 @@ const Sidebar = () => {
     const keys = Object.keys(modifiedCells)
     setTotalIslands(0)
     keys.forEach((key: string) => visitCell(key, 'start'))
-  }, [modifiedCells, visitCell])
+  }, [modifiedCells, visitCell, width, height])
 
   const messages = [
     'Wow 🤩',
