@@ -6,7 +6,9 @@ import {
   setWidth as setWidthAction,
   setHeight as setHeightAction,
   selectModifiedCells,
+  updateCellType,
 } from '../../slices/world.slice'
+import { getLatestBlockHash, getTransactions } from '../../services/api'
 
 const DEFAULT_VALUE = 3
 const MIN_VALUE = 1
@@ -22,7 +24,15 @@ interface IPosition {
   y: number
 }
 
-const Sidebar = () => {
+interface ITransaction {
+  hash: string
+}
+
+interface ISidebarProps {
+  onLoad(loaded: boolean): void
+}
+
+const Sidebar = ({ onLoad }: ISidebarProps) => {
   const dispatch = useDispatch()
   const [width, setWidth] = React.useState<number>(DEFAULT_VALUE)
   const [height, setHeight] = React.useState<number>(DEFAULT_VALUE)
@@ -47,6 +57,37 @@ const Sidebar = () => {
   React.useEffect(() => {
     dispatch(setHeightAction(height))
   }, [dispatch, height])
+
+  const callHashService = React.useCallback(async () => {
+    const blockHashResponse = await getLatestBlockHash()
+    const { hash } = blockHashResponse.data
+    const transactionsResponse = await getTransactions(hash)
+    const txResponse: ITransaction[] = transactionsResponse.data.tx
+    for (let j = 0; j < height; j++) {
+      const transaction = txResponse[j]
+      const { hash: hashStr } = transaction
+      const hashInfo = hashStr.split('')
+
+      for (let i = 0; i < width; i++) {
+        const character = hashInfo[i]
+        const characterAsNumber = parseInt(character, 10)
+
+        if (isNaN(characterAsNumber)) {
+          // It's a string, filled state
+          dispatch(updateCellType({ id: `${j}-${i}`, value: { type: CellType.GREEN_LAND } }))
+        } else {
+          // It's a number, empty state
+          dispatch(updateCellType({ id: `${j}-${i}`, value: { type: CellType.SEA } }))
+        }
+      }
+    }
+    // Hide overlay loading
+    onLoad(true)
+  }, [dispatch, height, width, onLoad])
+
+  React.useEffect(() => {
+    callHashService()
+  }, [callHashService])
 
   const visitedKeys: string[] = []
 

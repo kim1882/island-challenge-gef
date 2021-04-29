@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Container } from './Cell.styled'
-import { CellType, ICellProperties, updateCellType } from '../../slices/world.slice'
+import { CellType, ICellProperties, updateCellType, selectModifiedCells } from '../../slices/world.slice'
 
 interface ICellProps {
   id: string
@@ -10,6 +10,7 @@ interface ICellProps {
 }
 const Cell = ({ id, totalWidth, totalHeight }: ICellProps) => {
   const dispatch = useDispatch()
+  const modifiedCells = useSelector(selectModifiedCells)
   const [type, setType] = React.useState<CellType>(CellType.SEA)
 
   const toggleState = () => {
@@ -25,6 +26,17 @@ const Cell = ({ id, totalWidth, totalHeight }: ICellProps) => {
         break
     }
   }
+
+  React.useEffect(() => {
+    // Read initial value from store
+    if (modifiedCells) {
+      const initValue = modifiedCells[id]
+      if (initValue) {
+        const { type } = initValue
+        setType(type)
+      }
+    }
+  }, [id, modifiedCells])
 
   React.useEffect(() => {
     const value: ICellProperties = { type }
